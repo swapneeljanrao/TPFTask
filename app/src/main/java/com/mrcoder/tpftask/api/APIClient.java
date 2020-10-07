@@ -19,7 +19,7 @@ public class APIClient {
         return apiClient;
     }
 
-    private static ApiInterface getApi() {
+    public static ApiInterface getApi() {
         return retrofit.create(ApiInterface.class);
     }
 }
