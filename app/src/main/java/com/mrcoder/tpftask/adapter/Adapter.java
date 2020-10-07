@@ -58,9 +58,11 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewModel> {
         holder.tvSource.setText(a.getSource().getName());
         holder.tvAuthor.setText(a.getAuthor());
         holder.tvDescription.setText(a.getDescription());
-        holder.tvTime.setText(" \u2022 " + dateTime(a.getPublishedAt()));
+        holder.tvTime.setText(" \u2022 " + a.getPublishedAt());
         holder.tvPublishedAt.setText(dateTime(a.getPublishedAt()));
         Picasso.get().load(imageURL).into(holder.ivNewsImage);
+
+        holder.progressBar.setVisibility(View.INVISIBLE);
 
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override

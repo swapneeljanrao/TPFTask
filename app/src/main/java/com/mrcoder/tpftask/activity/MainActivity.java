@@ -2,8 +2,10 @@ package com.mrcoder.tpftask.activity;
 
 import android.app.Dialog;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -29,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
     RecyclerView recyclerView;
 
     Dialog dialog;
+    ProgressBar progressBar;
     final String API_KEY = "51cc9b0eb6864552ba0334215d1a3748";
     Adapter adapter;
     List<Articles> articles = new ArrayList<>();
@@ -40,26 +43,30 @@ public class MainActivity extends AppCompatActivity {
 
         recyclerView = findViewById(R.id.newsRecycler);
         dialog = new Dialog(MainActivity.this);
+        //progressBar = findViewById(R.id.progressBar);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         final String country = getCountry();
-        retrieveNews(country,API_KEY);
+        retrieveNews(country, API_KEY);
+        dialog.dismiss();
+        //progressBar.setVisibility(View.INVISIBLE);
+
     }
 
 
+    public void retrieveNews(String country, String apiKey) {
 
-    public void retrieveNews(String country,String apiKey){
         Call<Headlines> call;
         //call = APIClient.getInstance().getApi().getSpecificData(query,apiKey);
-        call = APIClient.getInstance().getApi().getHeadlines(country,apiKey);
+        call = APIClient.getInstance().getApi().getHeadlines(country, apiKey);
 
         call.enqueue(new Callback<Headlines>() {
             @Override
             public void onResponse(Call<Headlines> call, Response<Headlines> response) {
-                if (response.isSuccessful() && response.body().getArticles() !=null){
+                if (response.isSuccessful() && response.body().getArticles() != null) {
                     articles.clear();
                     articles = response.body().getArticles();
-                    adapter = new Adapter(MainActivity.this,articles);
+                    adapter = new Adapter(MainActivity.this, articles);
                     recyclerView.setAdapter(adapter);
                 }
             }
@@ -68,6 +75,7 @@ public class MainActivity extends AppCompatActivity {
             public void onFailure(Call<Headlines> call, Throwable t) {
                 Toast.makeText(MainActivity.this, t.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
             }
+
         });
     }
 
